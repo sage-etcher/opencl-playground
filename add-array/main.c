@@ -100,7 +100,7 @@ log_device_info (cl_device_id device)
 
     (void)fprintf (stdout, "MAX_COMPUTE_UNTIS:        %u\n", (unsigned)max_compute_units);
     (void)fprintf (stdout, "MAX_WORK_ITEM_DIMENSIONS: %u\n", (unsigned)max_work_item_dimensions);
-    (void)fprintf (stdout, "MAX_WORK_GROUP_SIZE:      %u\n", (unsigned)max_compute_units);
+    (void)fprintf (stdout, "MAX_WORK_GROUP_SIZE:      %u\n", (unsigned)max_work_group_size);
 }
 
 /* end of file */

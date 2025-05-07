@@ -343,6 +343,8 @@ compute_execute (compute_t *self, size_t iterations)
     global_size = (size_t)fmin ((float)iterations, (float)self->max_global_size);
     local_size  = (size_t)ceil ((float)iterations / global_size);
 
+    printf ("%zu %zu %zu %zu\n", iterations, self->max_global_size, global_size, local_size);
+
     for (; i < self->num_bufs; i++)
     {
         err |= clSetKernelArg (self->kernel, i, sizeof (cl_mem), &self->bufs[i]);
