@@ -1,6 +1,7 @@
-.depends
+**/.depend
 .vscode
 **.o
 **.d
-**.out
+**/cltest
+**/cltest**
 builddir/
