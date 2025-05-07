@@ -1,0 +1,6 @@
+.depends
+.vscode
+**.o
+**.d
+**.out
+builddir/
