@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <Cl/cl.h>
+#include <CL/cl.h>
 
 static size_t get_max_work_group_size (cl_device_id device);
 
