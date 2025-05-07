@@ -2,7 +2,7 @@
 #ifndef COMPUTE_H
 #define COMPUTE_H
 
-#include <Cl/cl.h>
+#include <CL/cl.h>
 
 typedef struct
 {
