@@ -9,6 +9,6 @@ CFLAGS+=    -Wno-unused-parameter
 CFLAGS+=    -DCL_TARGET_OPENCL_VERSION=300
 COPT=   -O0 -ggdb
 
-LDFLAGS=-lOpenCL
+LDFLAGS=    -lOpenCL -lm
 
 .include <bsd.prog.mk>
