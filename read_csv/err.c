@@ -5,9 +5,10 @@
 
 #define _(msg) (msg)
 
-
 void 
-err (const char *msg)
+error (const char *msg)
 {
     (void)fprintf (stderr, "%s", _(msg));
 }
+
+/* end of file */

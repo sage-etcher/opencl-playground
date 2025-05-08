@@ -12,7 +12,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define opencl_err err
+#define opencl_err(msg) error (msg)
 
 typedef struct {
     cl_platform_id platform;
@@ -34,8 +34,6 @@ typedef struct {
 #define ARRLEN(arr) (sizeof (arr) / sizeof (*(arr)))
 #define MIN(x,y) ((x) < (y) ? (x) : (y))
 
-static void opencl_err (const char *msg);
-
 static cl_platform_id get_default_platform (void);
 static cl_device_id get_default_device (cl_platform_id platform, cl_device_type device_type);
 
@@ -43,12 +41,9 @@ static void init (runtime_t *state);
 static void destroy (runtime_t *state);
 static void create_kernel (runtime_t *state, char *kernel_name, char *source);
 
-static void test_kernel_shader (char *source);
-
-
 
 void 
-knn_predict (const char *kernel_source, float16_t *dataset_arr, size_t dataset_count, float16_t input, float16_t *p_predicted)
+knn_predict (char *kernel_source, float16_t *dataset_arr, size_t dataset_count, float16_t input, float16_t *p_predicted)
 {
     runtime_t state = { 0 };
     enum {
@@ -56,11 +51,22 @@ knn_predict (const char *kernel_source, float16_t *dataset_arr, size_t dataset_c
         BUF_DIST,
     };
 
+    size_t dataset_size = sizeof (float16_t) * dataset_count;
+
     float *dists = NULL;
+    size_t dists_size = sizeof (float) * dataset_count;
     size_t iterations = dataset_count;
     int n = (uint32_t)iterations;
 
-    dists = malloc (sizeof (float) * database_count);
+    size_t k = 5;
+    size_t largest = 0;
+    size_t *closest = calloc (k, sizeof (size_t));
+    assert (closest != NULL);
+    float16_t sum = { 0 };
+    float16_t avg = { 0 };
+
+
+    dists = calloc (dataset_count, sizeof (float));
     assert (dists != NULL);
 
     size_t global_size = 0;
@@ -75,7 +81,7 @@ knn_predict (const char *kernel_source, float16_t *dataset_arr, size_t dataset_c
 
     (void)clEnqueueWriteBuffer (state.queue, state.bufs[BUF_POINTS], CL_TRUE, 0, sizeof (float16_t) * dataset_count, dataset_arr, 0, NULL, NULL);
 
-    (void)clSetKernelArg (state.kernel, 0, sizeof (float16_t), &pos);
+    (void)clSetKernelArg (state.kernel, 0, sizeof (float16_t), &input);
     (void)clSetKernelArg (state.kernel, 1, sizeof (cl_mem),   &state.bufs[BUF_POINTS]);
     (void)clSetKernelArg (state.kernel, 2, sizeof (cl_mem),   &state.bufs[BUF_DIST]);
     (void)clSetKernelArg (state.kernel, 3, sizeof (uint32_t), &n);
@@ -98,13 +104,56 @@ knn_predict (const char *kernel_source, float16_t *dataset_arr, size_t dataset_c
 
     (void)clEnqueueReadBuffer (state.queue, state.bufs[BUF_DIST], CL_TRUE, 0, sizeof (float) * dataset_count, dists, 0, NULL, NULL);
 
+    for (size_t i = 0; i < k; i++)
+    {
+        closest[i] = i;
+        largest = i;
+    }
+
     for (size_t i = 0; i < iterations; i++)
     {
-        printf ("%0.04f ", dists[i]);
+        /* no match */
+        if (dists[i] >= dists[closest[largest]])
+        {
+            continue;
+        }
+
+        /* match */
+        closest[largest] = i;
+
+        /* recalc largest */
+        for (size_t j = 0; j < k; j++)
+        {
+            if (dists[closest[largest]] < dists[closest[j]])
+            {
+                largest = j;
+            }
+        }
     }
+
+    for (size_t i = 0; i < 16; i++)
+    {
+        for (size_t j = 0; j < k; j++)
+        {
+            sum.m[i] += dataset_arr[closest[j]].m[i];
+        }
+
+        avg.m[i] = sum.m[i] / k;
+    }
+
+
+    free (closest);
+    closest = NULL;
+    k = 0;
+    largest = 0;
+
+    free (dists);
+    dists = NULL;
+    dists_size = 0;
 
     destroy (&state);
 
+    *p_predicted = avg;
 }
 
 
@@ -200,7 +249,7 @@ create_kernel (runtime_t *state, char *kernel_name, char *source)
     assert (state != NULL);
     assert (source != NULL);
 
-    state->program = clCreateProgramWithSource (state->context, 1, &source, NULL, NULL);
+    state->program = clCreateProgramWithSource (state->context, 1, (const char **)&source, NULL, NULL);
 
     err = clBuildProgram (state->program, 1, &state->device, NULL, NULL, NULL);
     if (err != CL_SUCCESS)

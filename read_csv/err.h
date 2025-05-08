@@ -2,6 +2,6 @@
 #ifndef ERR_H
 #define ERR_H
 
-void err (const char *msg);
+void error (const char *msg);
 
 #endif 

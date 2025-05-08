@@ -25,7 +25,7 @@ read_file (const char *file, char **p_content)
     fp = fopen (file, "r");
     if (fp == NULL)
     {
-        err ("Failed to open file.");
+        error ("Failed to open file.");
         exit (1);
     }
 
@@ -34,7 +34,7 @@ read_file (const char *file, char **p_content)
     pos = ftell (fp);
     if (pos < 0)
     {
-        err ("Error getting length of file.");
+        error ("Error getting length of file.");
         (void)fclose (fp);
         fp = NULL;
         exit (1);

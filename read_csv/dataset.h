@@ -4,6 +4,8 @@
 
 #include "types.h"
 
+#include <stddef.h>
+
 typedef enum {
     DS_RANDOM,
     DS_ACHP,
@@ -23,7 +25,8 @@ typedef enum {
 } dataset_index;
 
 typedef enum {
-    DS_CLASS_SA,
+    DS_CLASS_NONE = 0,
+    DS_CLASS_SA = 1,
     DS_CLASS_SB,
     DS_CLASS_SC,
     DS_CLASS_TA,
@@ -32,7 +35,8 @@ typedef enum {
 } dataset_class_t;
 
 typedef enum {
-    DS_RANDOM_R1,
+    DS_RANDOM_NONE = 0,
+    DS_RANDOM_R1 = 1,
     DS_RANDOM_R2,
     DS_RANDOM_R3,
 } dataset_random_t;

@@ -40,10 +40,10 @@ process_dataset (char *contents, dataset_t **p_dataset_arr, size_t *p_dataset_co
     }
 
     /* allocate room for all entrys */
-    ds = malloc (i * sizeof (dataset_t));
+    ds = calloc (i, sizeof (dataset_t));
     assert (ds != NULL);
 
-    /* proccess the csv file */
+        /* proccess the csv file */
     iter = strtok (data, "\n,");
     while (iter != NULL)
     {
@@ -65,7 +65,7 @@ process_dataset (char *contents, dataset_t **p_dataset_arr, size_t *p_dataset_co
             }
             else
             {
-                err ("DS_RANDOM out of range.");
+                error ("DS_RANDOM out of range.");
                 exit (1);
             }
             break;
@@ -97,7 +97,7 @@ process_dataset (char *contents, dataset_t **p_dataset_arr, size_t *p_dataset_co
             }
             else
             {
-                err ("DS_CLASS out of range.");
+                error ("DS_CLASS out of range.");
                 exit (1);
             }
             break;
@@ -118,7 +118,7 @@ process_dataset (char *contents, dataset_t **p_dataset_arr, size_t *p_dataset_co
             break;
 
         default:
-            err ("parser read out of range.");
+            error ("parser read out of range.");
             exit (1);
         }
 

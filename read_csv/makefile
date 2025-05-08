@@ -1,6 +1,6 @@
 
-PROG=   distcalc
-SRCS=   main.c
+PROG=   knntest
+SRCS=   dataset.c err.c knn.c main.c read_file.c
 MAN=    
 
 CFLAGS=     -Wall -Wextra
