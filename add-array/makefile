@@ -1,13 +1,14 @@
 
 PROG=   cltest
-SRCS=   main.c
+SRCS=   main.c compute.c
 MAN=    
 
-CFLAGS= -Wall -Wextra
-CFLAGS= -Wno-unused-variable
-CFLAGS= -Wno-unused-parameter
+CFLAGS=     -Wall -Wextra
+CFLAGS+=    -Wno-unused-variable
+CFLAGS+=    -Wno-unused-parameter
+CFLAGS+=    -DCL_TARGET_OPENCL_VERSION=300
 COPT=   -O0 -ggdb
 
-LDFLAGS=-lOpenCL
+LDFLAGS=    -lOpenCL -lm
 
 .include <bsd.prog.mk>
