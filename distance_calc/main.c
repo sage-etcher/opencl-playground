@@ -325,6 +325,11 @@ destroy (runtime_t *state)
 {
     if (state == NULL) { return; }
 
+    (void)clReleaseMemObject (state->bufs[0]);
+    (void)clReleaseMemObject (state->bufs[1]);
+    state->bufs[0] = NULL;
+    state->bufs[1] = NULL;
+
     (void)clReleaseCommandQueue (state->queue);
     state->queue = NULL;
 
