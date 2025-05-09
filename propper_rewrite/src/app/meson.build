@@ -1,6 +1,4 @@
 
-conf_data = configuration_data()
-conf_data.set('datadir', get_option('datadir') / 'apptest')
 configure_file(
   input  : 'config.h.in',
   output : 'config.h',
@@ -19,6 +17,7 @@ apptest = executable(
     inih_dep,
     portability_dep,
   ],
+  install : true,
 )
 
 # end of file

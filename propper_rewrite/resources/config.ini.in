@@ -2,7 +2,7 @@
 ; no quotes around strings 
 
 [dataset]
-file = /usr/share/our_app/dataset.csv
+file = @datadir@/dataset.csv
 has_headers = true
 format = %s,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%s
 

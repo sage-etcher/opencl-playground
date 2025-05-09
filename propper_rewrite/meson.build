@@ -23,6 +23,10 @@ inih_dep = inih_proj.get_variable('inih_dep')
 subdir('external')
 
 # project
+apptest_datadir = get_option('datadir') / 'apptest'
+conf_data = configuration_data()
+conf_data.set('datadir', apptest_datadir)
+
 subdir('resources')
 subdir('assets')
 subdir('src')
