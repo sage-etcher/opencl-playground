@@ -23,20 +23,20 @@ main (int argc, char **argv)
 
     dataset_t paritial_set = { 
         .m = {
-            [DS_RANDOM] = 0,    /* sample batch id */
-            [DS_ACHP]   = 0,    /* average chlorophyll content */
-            [DS_PHR]    = 0,    /* plant height growth rate */
-            [DS_AWWGV]  = 0,    /* average wet weight of vegetative growth */
-            [DS_ALAP]   = 0,    /* average leaf area per plant */
-            [DS_ANPL]   = 0,    /* average number of leaves per plant */
-            [DS_ARD]    = 0,    /* average root diameter */
-            [DS_ADWR]   = 0,    /* average dry weight of roots */
-            [DS_PDMVG]  = 0,    /* % dry matter in vegetative growth */
-            [DS_ARL]    = 0,    /* average root length */
-            [DS_AWWR]   = 0,    /* average wet weight of roots */
-            [DS_ADWV]   = 0,    /* average dry weight fo vegative parts */
-            [DS_PDMRG]  = 0,    /* % dry matter in root growth */
-            [DS_CLASS]  = 1,    /* experiement group label */
+            //[DS_RANDOM] =  1.00,    /* sample batch id */
+            [DS_ACHP]   = 34.21,    /* average chlorophyll content */
+            [DS_PHR]    = 64.99,    /* plant height growth rate */
+            [DS_AWWGV]  =  1.24,    /* average wet weight of vegetative growth */
+            [DS_ALAP]   = 1476,     /* average leaf area per plant */
+            [DS_ANPL]   =  3.90,    /* average number of leaves per plant */
+            [DS_ARD]    = 16.30,    /* average root diameter */
+            [DS_ADWR]   = 0.794,    /* average dry weight of roots */
+            [DS_PDMVG]  = 43.69,    /* % dry matter in vegetative growth */
+            [DS_ARL]    = 20.35,    /* average root length */
+            [DS_AWWR]   =  2.80,    /* average wet weight of roots */
+            [DS_ADWV]   =  0.55,    /* average dry weight fo vegative parts */
+            [DS_PDMRG]  = 27.81,    /* % dry matter in root growth */
+            //[DS_CLASS]  =  2.00,    /* experiement group label */
         }
     };
     dataset_t guessed_dataset = { 0 };
@@ -51,30 +51,22 @@ main (int argc, char **argv)
     read_file (kernel_source_file, &kernel_source);
     knn_predict (kernel_source, dataset, dataset_count, paritial_set, &guessed_dataset);
 
-    printf ("%10s %10s %10s %10s %10s %10s %10s %10s\n"
-            "%10s %10s %10s %10s %10s %10s\n", 
-            "RANDOM", "ACHP", "PHR",  "AWWGV", "ALAP",  "ANPL", "ARD", "ADWR", 
-            "PDMVG",  "ARL",  "AWWR", "ADWV",  "PDMRG", "CLASS");
-
-    printf ("input:\n");
-    for (int i = 0; i < 16; i++)
-    {
-        printf ("%10.04f ", paritial_set.m[i]);
-        if (((i+1) % 8) == 0)
-        {
-            printf ("\n");
-        }
-    }
-
-    printf ("output:\n");
-    for (int i = 0; i < 16; i++)
-    {
-        printf ("%10.4f ", guessed_dataset.m[i]);
-        if (((i+1) % 8) == 0)
-        {
-            printf ("\n");
-        }
-    }
+    printf ("%10s  %10s    %10s\t%s\n", "Short Name", "Input", "Output", "Description");
+    printf ("-------------------------------------------------------------\n");
+    printf ("%10s: %10.04f -> %10.04f\t%s\n", "RANDOM", paritial_set.m[0],  guessed_dataset.m[0],  "Sample Batch ID");
+    printf ("%10s: %10.04f -> %10.04f\t%s\n", "ACHP",   paritial_set.m[1],  guessed_dataset.m[1],  "Average Chlorophyll Content");
+    printf ("%10s: %10.04f -> %10.04f\t%s\n", "PHR",    paritial_set.m[2],  guessed_dataset.m[2],  "Plant Height Growth Rate");
+    printf ("%10s: %10.04f -> %10.04f\t%s\n", "AWWGV",  paritial_set.m[3],  guessed_dataset.m[3],  "Average Wet-Weight of Vegetative Growth");
+    printf ("%10s: %10.04f -> %10.04f\t%s\n", "ALAP",   paritial_set.m[4],  guessed_dataset.m[4],  "Average Leaf Area per Plant");
+    printf ("%10s: %10.04f -> %10.04f\t%s\n", "ANPL",   paritial_set.m[5],  guessed_dataset.m[5],  "Average Number of Leaves per Plant");
+    printf ("%10s: %10.04f -> %10.04f\t%s\n", "ARD",    paritial_set.m[6],  guessed_dataset.m[6],  "Average Root Diameter");
+    printf ("%10s: %10.04f -> %10.04f\t%s\n", "ADWR",   paritial_set.m[7],  guessed_dataset.m[7],  "Average Dry-Weight of Roots");
+    printf ("%10s: %10.04f -> %10.04f\t%s\n", "PDMVG",  paritial_set.m[8],  guessed_dataset.m[8],  "Percent Dry Matter in Vegetative Growth");
+    printf ("%10s: %10.04f -> %10.04f\t%s\n", "ARL",    paritial_set.m[9],  guessed_dataset.m[9],  "Average Root Length");
+    printf ("%10s: %10.04f -> %10.04f\t%s\n", "AWWR",   paritial_set.m[10], guessed_dataset.m[10], "Average Wet-Weight of Roots");
+    printf ("%10s: %10.04f -> %10.04f\t%s\n", "ADWV",   paritial_set.m[11], guessed_dataset.m[11], "Average Dry-Weight of Roots");
+    printf ("%10s: %10.04f -> %10.04f\t%s\n", "PDMRG",  paritial_set.m[12], guessed_dataset.m[12], "Percent Dry Matter in Root Growth");
+    printf ("%10s: %10.04f -> %10.04f\t%s\n", "CLASS",  paritial_set.m[13], guessed_dataset.m[13], "Experiement Group ID");
 
     /* clean up */
     free (kernel_source);
