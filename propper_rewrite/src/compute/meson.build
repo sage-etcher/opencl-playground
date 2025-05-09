@@ -4,9 +4,10 @@ compute_library = static_library(
   'compute',
   files([
     'compute.c',
-    'ftypes.c',
+    'opencl_error.c',
   ]),
   dependencies : [
+    error_dep,
     opencl_dep,
   ],
 )

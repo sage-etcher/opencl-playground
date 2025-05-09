@@ -1,0 +1,3 @@
+
+#define DATADIR        "@datadir@" 
+#define GLOBAL_CONFIG  DATADIR"/config.ini"
